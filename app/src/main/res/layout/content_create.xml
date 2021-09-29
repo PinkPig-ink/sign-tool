@@ -1,0 +1,48 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+
+        <LinearLayout
+            android:id="@+id/register_classname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="22dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_yonghu"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingRight="5dp"
+                android:text="班级名称："/>
+            <EditText
+                android:id="@+id/et_className"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="请输入你创建班级的名称"
+                android:textSize="14dp"
+                />
+        </LinearLayout>
+
+    <com.xuexiang.xui.widget.textview.supertextview.SuperButton
+        android:id="@+id/btn_login"
+        style="@style/SuperButton.Primary.Login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/register_classname"
+        android:layout_marginTop="16dp"
+        android:text="创建" />
+
+    </RelativeLayout>
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
