@@ -16,7 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import com.fengchengliu.signteacher.Adapter.studentAdapter;
+import com.fengchengliu.signteacher.Adapter.StudentAdapter;
 import com.fengchengliu.signteacher.entity.User;
 
 
@@ -38,9 +38,10 @@ public class studentActivity extends AppCompatActivity {
     };
 
     private void dealDate(String  message) {
+        // 解析message并获取学生数据
         Gson gson = new Gson();
         List<User> studentList= gson.fromJson(message, new TypeToken<List<User>>(){}.getType());
-        studentAdapter studentAdapter = new studentAdapter(this,studentList);
+        StudentAdapter studentAdapter = new StudentAdapter(this,studentList);
         listView.setAdapter(studentAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

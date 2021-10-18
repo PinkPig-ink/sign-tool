@@ -1,11 +1,16 @@
 package com.fengchengliu.signteacher.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 public class User {
 
-    private int userId;
+    @SerializedName("name")
     private String userName;
-    private int userType;
+    @SerializedName("type")
+    private int userType; //用户标识
+    @SerializedName("account")
     private int userAccount;
+    @SerializedName("password")
     private String userPassword;
 
     public int getUserAccount() {
@@ -14,14 +19,6 @@ public class User {
 
     public void setUserAccount(int userAccount) {
         this.userAccount = userAccount;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {
@@ -51,8 +48,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + userId +
-                ", userName='" + userName + '\'' +
+                "userName='" + userName + '\'' +
                 ", userType=" + userType +
                 ", userAccount=" + userAccount +
                 ", userPassword='" + userPassword + '\'' +

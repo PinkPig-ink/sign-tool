@@ -16,7 +16,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name="com.fengchengliu.signteacher.studentActivity"></activity>
-        <activity android:name="com.fengchengliu.signteacher.CreateClassActivity" />
         <activity
             android:name="com.fengchengliu.signteacher.HomeActivity"
             android:label="@string/title_activity_home"

@@ -14,11 +14,11 @@ import com.fengchengliu.signteacher.entity.User;
 
 import java.util.List;
 
-public class studentAdapter extends BaseAdapter {
+public class StudentAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     List<User> listItem;
 
-    public studentAdapter(Context context, List<User> listItem){
+    public StudentAdapter(Context context, List<User> listItem){
         this.inflater = LayoutInflater.from(context);
         this.listItem = listItem;
 
@@ -46,7 +46,6 @@ public class studentAdapter extends BaseAdapter {
             holder = new StudentItemVH();
             convertView = inflater.inflate(R.layout.item_student,null);
             holder.studentName =  (TextView) convertView.findViewById(R.id.studentName);
-            holder.studentId = (TextView)convertView.findViewById(R.id.studentId);
             holder.signStatus = (TextView)convertView.findViewById(R.id.signStatus);
 
             convertView.setTag(holder);
@@ -56,8 +55,8 @@ public class studentAdapter extends BaseAdapter {
         if(listItem==null||listItem.get(position)==null)
             Log.d("StudentAdapter","null");
         holder.studentName.setText((String)listItem.get(position).getUserName());
-        holder.studentId.setText(String.valueOf(listItem.get(position).getUserId()));
-        holder.signStatus.setText("");
+        holder.studentAccount.setText(String.valueOf(listItem.get(position).getUserAccount()));
+        holder.signStatus.setText("未签到");
 
         return convertView;
     }

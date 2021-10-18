@@ -1,5 +1,6 @@
 package com.fengchengliu.signteacher;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -18,41 +20,59 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.fengchengliu.signteacher.entity.User;
+import com.google.gson.Gson;
+
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    static int MSG_SUCCESS=1;
-    static int MSG_FALL=0;
+    static int MSG_SUCCESS = 1;
+    static int MSG_FALL = 0;
 
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-         @Override
-          public void handleMessage(Message msg) {
-                         if (msg.what == MSG_SUCCESS) {
-                                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                 //保存登录的状态和用户名
-                             final EditText Account =  findViewById(R.id.userAccount);
-                             Log.d("得到 account ",Account.getText().toString());
-                             saveLoginStatus(Account.getText().toString());
-                                 //登录成功的状态保存到MainActivity
-                             Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                             intent.putExtra("account",Account.getText().toString() );
-                             startActivity(intent);
-//                                 Intent intent = new Intent();
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            if (msg.what == MSG_SUCCESS) {
+                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                //保存登录的状态和用户名
+                final EditText Account = findViewById(R.id.userAccount);
+                Log.d("得到 account ", Account.getText().toString());
+                //登录成功的状态保存到MainActivity
+                saveLoginStatus(Account.getText().toString());
+                // 根据账号类型判断启动不同页面
+                String message = msg.obj.toString();
+                User user = new Gson().fromJson(message, User.class);
 
-//                             setResult(RESULT_OK, intent);
-                             LoginActivity.this.finish();
-                         }else {
-                                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                         }
-                     }
-    };
+                if (user.getUserType() == 0) {
+                    // 学生端 , 进入签到页面
+
+                }else if (user.getUserType() == 1) {
+                    // 老师端 , 进入班级列表
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    intent.putExtra("account", Account.getText().toString());
+                    startActivity(intent);
+                }
+                Log.d("321", user.toString());
+
+                // startActivity(intent);
+            } else if (msg.what == MSG_FALL){
+                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+            }
+            return false;
+        }
+
+    });
 
     private void saveLoginStatus(String account) {
         SharedPreferences preference = getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preference.edit();
-        editor.putString("account",account);
+        editor.putString("account", account);
+        editor.apply();
     }
 
     @Override
@@ -61,46 +81,62 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Button login = findViewById(R.id.btn_login);
-        final EditText Account =  findViewById(R.id.userAccount);
+        final EditText Account = findViewById(R.id.userAccount);
         final EditText Password = findViewById(R.id.password);
+        SharedPreferences user = getSharedPreferences("user", MODE_PRIVATE);
+        String saveAccount = user.getString("account", "");
+        Account.setText(saveAccount);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String account = Account.getText().toString();
                 String password = Password.getText().toString();
-                if(TextUtils.isEmpty(account)) {
+                if (TextUtils.isEmpty(account)) {
                     Toast.makeText(LoginActivity.this, "请输入用户名", Toast.LENGTH_SHORT).show();
                     return;
-                }else if(TextUtils.isEmpty(password)){
+                } else if (TextUtils.isEmpty(password)) {
                     Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                     return;
-                }else if(true){
-                    new Thread(){
-                        @Override
-                        public void run() {
-                            String message= null;
-                            try{
-                                final OkHttpClient client = new OkHttpClient();
-                                // String url = "http://10.0.2.2:8081/user/getUser";
-                                // RequestBody formBody = new FormBody.Builder().add("account",account).add("password",password).build();
-                                // Request request = new Request.Builder().post(formBody).url(url).build();
-                                // Response response = client.newCall((request)).execute();
-                                // if(response.isSuccessful()) {
-                                //     message = response.body().string();
-                                //     Log.d("123",message);
-                                // }else
-                                //     Log.d("123","fall");
+                } else if (true) {
+                    new Thread(() -> {
+                        Message msg = Message.obtain();
+                        String message = null;
+                        try {
+                            final OkHttpClient client = new OkHttpClient();
+                            Log.d("123", account + "/n" + password);
+                            String url = "http://116.63.131.15:9001/getUser?account=" + account + "&password=" + password;
+                            Request request = new Request.Builder()
+                                    .url(url)
+                                    .build();
+                            Response response = client.newCall((request)).execute();
+                            Log.d("123",url);
+                            // 根据查询数据库来判断登录成功
+                            if (response.isSuccessful() && response.body().contentLength()!= 0) {
+                                message = response.body().string();
+                                // 传入msg消息
+                                msg.obj = message;
+                                Log.d("123", message);
                                 message = "true";
-                            }catch (Exception e){
-                                e.printStackTrace();
+                            } else {
+                                Log.d("123", "fall");
+                                message = "false";
                             }
-
-                            if(message.equals("true"))
-                                handler.sendEmptyMessage(MSG_SUCCESS);
-                            else
-                                handler.sendEmptyMessage(MSG_FALL);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    }.start();
+                        if (message != null) {
+                            if (message.equals("true")) {
+                                // handler.sendEmptyMessage(MSG_SUCCESS);
+                                // 发送消息
+                                msg.what = MSG_SUCCESS;
+                                handler.sendMessage(msg);
+                            }
+                            if (message.equals("false"))
+                                handler.sendEmptyMessage(MSG_FALL);
+                        }else {
+                            handler.sendEmptyMessage(MSG_FALL);
+                        }
+                    }).start();
                 }
             }
         });
@@ -108,15 +144,5 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    boolean isRight(String account ,String password){
-        // String url = "http://localhost:8081/user/getUse/"+account+"/"+password;
-//        RequestSign requestSign = new RequestSign();
-//         String message=HttpUtil.getData(url);
-//        String message = requestSign.connect(url);
-//         if(message.equals("true"))
-//             return true;
-//         else return false;
-        return true;
-    }
 
 }

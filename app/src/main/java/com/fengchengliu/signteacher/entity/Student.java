@@ -1,20 +1,11 @@
 package com.fengchengliu.signteacher.entity;
 
-public class student {
+public class Student {
 
-        private int studentId; // 学号
         private String studentName; // 姓名
         private int userAccount; // 学生账号
         private String userPassword; // 学生密码
 
-
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
 
     public String getStudentName() {
         return studentName;
@@ -43,8 +34,9 @@ public class student {
     @Override
     public String toString() {
         return "student{" +
-                "studentId=" + studentId +
-                ", studentName='" + studentName + '\'' +
+                "studentName='" + studentName + '\'' +
+                ", userAccount=" + userAccount +
+                ", userPassword='" + userPassword + '\'' +
                 '}';
     }
 }

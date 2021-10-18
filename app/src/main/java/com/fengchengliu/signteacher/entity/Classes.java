@@ -1,17 +1,22 @@
 package com.fengchengliu.signteacher.entity;
 
-public class classes {
-    private int classId; // 班级ID
+import com.google.gson.annotations.SerializedName;
+
+public class Classes {
+    @SerializedName("className")
     private String className; // 班级名
-    private int classNumber; // 班级号
+    @SerializedName("0")
+    private int classNumber; //班级人数, 通过State表的记录来获取,每个班的人数, 默认是 0 个人
+    @SerializedName("classKey")
     private String classKey;  // 加入密码
 
-    public int getClassId() {
-        return classId;
-    }
-
-    public void setClassId(int classId) {
-        this.classId = classId;
+    @Override
+    public String toString() {
+        return "classes{" +
+                "className='" + className + '\'' +
+                ", classNumber=" + classNumber +
+                ", classKey='" + classKey + '\'' +
+                '}';
     }
 
     public String getClassName() {

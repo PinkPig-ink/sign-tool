@@ -5,23 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-    android:layout_marginTop="10dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    cardView:cardCornerRadius="20dp"
+    app:contentPadding="16dp"
+    cardView:cardCornerRadius="8dp"
     app:cardBackgroundColor="@color/color_f4"
-
     android:foreground="?android:attr/selectableItemBackground"
-    cardView:cardElevation="0dp"
-    layout_height="2dp"
-    layout_width="2dp">
-
+    android:clickable="true"
+    android:translationZ="2dp"
+    cardView:cardElevation="12dp"
+    android:focusable="true"
+    android:descendantFocusability="blocksDescendants"
+    >
 
     <RelativeLayout
         android:id="@+id/the_class"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <ImageView
             android:id="@+id/item_list_iv_list"
@@ -56,22 +55,26 @@
             android:id="@+id/classCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:text="EFDSFG"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/className"
 
             />
-        <TextView
-            android:id="@+id/classId"
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:src="@drawable/ic_baseline_close_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="123"
-            android:visibility="invisible"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentTop="true"
+            android:contentDescription="删除"
             />
 
     </RelativeLayout>
@@ -79,40 +82,3 @@
     </androidx.cardview.widget.CardView>
 
 
-
-
-
-
-
-
-
-
-
-
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent">-->
-<!--    <ImageView-->
-<!--        android:layout_alignParentRight="true"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/ItemImage"/>-->
-<!--    <TextView android:id="@+id/ItemTitle"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_width="fill_parent"-->
-<!--        android:textSize="20sp"/>-->
-<!--    <TextView android:id="@+id/ItemText"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_width="fill_parent"-->
-<!--        android:layout_below="@+id/ItemTitle"/>-->
-<!--</RelativeLayout>-->
-
-
-
-<!--<Button-->
-<!--android:layout_width="wrap_content"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:text="按钮"-->
-<!--android:id="@+id/ItemBottom"-->
-<!--android:focusable="false"-->
-<!--android:layout_toLeftOf="@+id/ItemImage" />-->

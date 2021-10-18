@@ -4,6 +4,6 @@ import android.widget.TextView;
 
 public class StudentItemVH {
     public TextView studentName;
-    public TextView studentId;
+    public TextView studentAccount;
     public TextView signStatus; //签到状态
 }
