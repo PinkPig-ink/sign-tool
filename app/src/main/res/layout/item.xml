@@ -5,15 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:contentPadding="16dp"
-    cardView:cardCornerRadius="8dp"
+    app:contentPadding="24dp"
+    cardView:cardCornerRadius="24dp"
     app:cardBackgroundColor="@color/color_f4"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:clickable="true"
     android:translationZ="2dp"
     cardView:cardElevation="12dp"
-    android:focusable="true"
-    android:descendantFocusability="blocksDescendants"
+
     >
 
     <RelativeLayout
@@ -26,7 +23,7 @@
             android:id="@+id/item_list_iv_list"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:src="@mipmap/ic_launcher_round" />
+            android:src="@drawable/hardwork" />
 
         <TextView
             android:id="@+id/className"
@@ -37,7 +34,7 @@
             android:layout_toRightOf="@+id/item_list_iv_list"
             android:text="班级一"
             android:textSize="20dp"
-            android:textStyle="bold" />
+             />
         <TextView
             android:id="@+id/classNumber"
             android:layout_width="wrap_content"
@@ -45,7 +42,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:text="100人"
-            android:textStyle="bold"
             android:layout_toRightOf="@+id/item_list_iv_list"
 
             android:layout_below="@+id/className"
@@ -60,21 +56,21 @@
             android:layout_marginEnd="20dp"
             android:text="EFDSFG"
             android:textSize="20sp"
-            android:textStyle="bold"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/className"
 
             />
         <ImageView
-            android:id="@+id/iv_delete"
-            android:src="@drawable/ic_baseline_close_24"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/iv_class_menu"
+            android:src="@drawable/gengduo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
+            android:clickable="true"
             android:layout_alignParentTop="true"
-            android:contentDescription="删除"
+            android:contentDescription="more"
             />
 
     </RelativeLayout>

@@ -20,27 +20,6 @@
     </style>
 
 
-    <!--    &lt;!&ndash;SettingTheme&ndash;&gt;-->
-    <!--    <style name="SettingTheme" parent="XUITheme.Phone">-->
-    <!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-    <!--        <item name="colorPrimary">@color/colorPrimary</item>-->
-    <!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-    <!--        <item name="colorAccent">@color/colorAccent</item>-->
-
-    <!--        &lt;!&ndash;有Title&ndash;&gt;-->
-    <!--        <item name="windowActionBar">true</item>-->
-    <!--        <item name="windowNoTitle">false</item>-->
-    <!--        <item name="actionBarStyle">@style/ActionBarStyle</item>-->
-    <!--    </style>-->
-
-
-    <!--    <style name="ActionBarStyle" parent="@style/Widget.AppCompat.ActionBar">-->
-    <!--        <item name="titleTextStyle">@style/ToolbarTitle</item>-->
-    <!--        <item name="subtitleTextStyle">@style/ToolbarSubTitle</item>-->
-    <!--        <item name="background">?attr/colorPrimary</item>-->
-    <!--        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>-->
-    <!--        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>-->
-    <!--    </style>-->
 
 
     <!--DialogTheme，用于将Activity作为Dialog的主题-->
@@ -77,6 +56,15 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--☆☆☆☆☆☆☆☆   溢出菜单样式   ☆☆☆☆☆☆☆☆-->
+    <style name="MyPopupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="overlapAnchor">false</item>
+        <!--overlapAnchor是让溢出菜单不要盖住ToolBar-->
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

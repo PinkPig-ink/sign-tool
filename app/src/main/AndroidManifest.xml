@@ -19,7 +19,9 @@
         <activity
             android:name="com.fengchengliu.signteacher.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".LoginActivity"
+            />
         <activity android:name="com.fengchengliu.signteacher.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

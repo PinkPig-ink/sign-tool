@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
 
-    @SerializedName("name")
+    @SerializedName("userName")
     private String userName;
-    @SerializedName("type")
+    @SerializedName("userType")
     private int userType; //用户标识
-    @SerializedName("account")
+    @SerializedName("userAccount")
     private int userAccount;
-    @SerializedName("password")
+    @SerializedName("userPassword")
     private String userPassword;
 
     public int getUserAccount() {

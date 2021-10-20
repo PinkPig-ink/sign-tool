@@ -1,15 +1,19 @@
 package com.fengchengliu.signteacher;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
 import com.fengchengliu.signteacher.Utils.RandomNum;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.fengchengliu.signteacher.Adapter.ClassAdapter;
 import com.fengchengliu.signteacher.entity.Classes;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -18,9 +22,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -53,7 +60,10 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this, "创建成功！", Toast.LENGTH_SHORT).show();
                 break;
             case MESSAGE_CREATE_FALL:
-                Toast.makeText(HomeActivity.this, "创建失败！", Toast.LENGTH_SHORT).show();
+                if (msg.obj == "输入为空")
+                    Toast.makeText(getApplicationContext(), "班级名称不能为空！" , Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(HomeActivity.this, "创建失败, 请检查网络连接!", Toast.LENGTH_SHORT).show();
                 break;
             case MESSAGE_REFRESH_SUCCESS:
                 getClassData((String) msg.obj);
@@ -76,13 +86,41 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @SuppressLint("ResourceType")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_create:
+                Toast.makeText(this, "创建班级", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_joinClass:
+                Toast.makeText(this, "加入班级", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_MyInfo:
+                Toast.makeText(this, "个人信息", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        listView = findViewById(R.id.allClass);
-        String account = getIntent().getStringExtra("account");
+        // toolBar的设置
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar!= null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+        listView = findViewById(R.id.allClass);
+        String account = getIntent().getStringExtra("account");
         //悬浮的按钮
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
@@ -100,9 +138,6 @@ public class HomeActivity extends AppCompatActivity {
 
         });
         getClassData(account);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            Toast.makeText(HomeActivity.this,"点击了"+position,Toast.LENGTH_SHORT).show();
-        });
         listView.setOnLongClickListener(v->{
             Toast.makeText(HomeActivity.this,"长按",Toast.LENGTH_SHORT).show();
             return false;
@@ -115,7 +150,7 @@ public class HomeActivity extends AppCompatActivity {
         final EditText editText = new EditText(HomeActivity.this);
         AlertDialog.Builder inputDialog =
                 new AlertDialog.Builder(HomeActivity.this);
-        inputDialog.setTitle("请输入班级名称！").setView(editText);
+        inputDialog.setTitle("请输入班级名称").setView(editText);
         inputDialog.setPositiveButton("确定",
                 (dialog, which) -> {
                     String className = editText.getText().toString();
@@ -144,42 +179,42 @@ public class HomeActivity extends AppCompatActivity {
                             msg.what = MESSAGE_CREATE_SUCCESS;
 
                         } catch (IOException e) {
+                            msg.obj = "输入为空";
                             msg.what = MESSAGE_CREATE_FALL;
                             e.printStackTrace();
                         } finally {
                             handler.sendMessage(msg);
                         }
                     }).start();
-                }).show();
+                })
+                .setNegativeButton("取消",null)
+                .show();
     }
 
     private void getClassData(String account) {
 //        String account = sharedPreferences.getString("account","0");
 //        Log.d("account",account);
-        new Thread() {
-            @Override
-            public void run() {
-                Message msg = Message.obtain();
-                final OkHttpClient client = new OkHttpClient();
-                String url = "http://116.63.131.15:9001/getClasses?account=" + account;
-                Request request = new Request.Builder()
-                        .url(url)
-                        .build();
-                try (Response response = client.newCall(request).execute()) {
-                    if (response.isSuccessful()) {
-                        assert response.body() != null;
-                        if (response.body().contentLength() != 0) {
-                            msg.what = MESSAGE_GET_SUCCESS;
-                            msg.obj = response.body().string();
-                        }
+        new Thread(() -> {
+            Message msg = Message.obtain();
+            final OkHttpClient client = new OkHttpClient();
+            String url = "http://116.63.131.15:9001/getClasses?account=" + account;
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            try (Response response = client.newCall(request).execute()) {
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    if (response.body().contentLength() != 0) {
+                        msg.what = MESSAGE_GET_SUCCESS;
+                        msg.obj = response.body().string();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    handler.sendMessage(msg);
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                handler.sendMessage(msg);
             }
-        }.start();
-
+        }).start();
     }
+
 }

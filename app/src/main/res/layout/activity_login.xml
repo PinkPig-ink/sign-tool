@@ -1,43 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/design_default_color_on_primary"
     android:orientation="vertical">
 
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center_horizontal"
-        app:srcCompat="@mipmap/ic_launcher_round" />
-
-
-    <TextView
-        style="@style/TextStyle.Title"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:text="登 录"
-        android:textSize="30sp" />
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/login_toolbar"
+            android:layout_width="match_parent"
+            android:textAlignment="textStart"
+            app:title="登录"
+            app:titleTextColor="@color/menu_white_pressed"
+            android:translationZ="20dp"
+            android:elevation="15dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+
+            />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="160dp"
         android:layout_marginEnd="24dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+
+        >
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="start|center_vertical"
                 android:tint="?attr/colorAccent"
-                app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+                android:src="@drawable/id_tag"
+                tools:ignore="VectorDrawableCompat" />
 
             <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
                 android:id="@+id/userAccount"
@@ -48,8 +57,8 @@
 
                 app:met_clearButton="true"
                 app:met_errorMessage="@string/tip_phone_number_error"
-                app:met_floatingLabel="normal"
-                app:met_floatingLabelText="账号"
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelText="account"
                 app:met_regexp="@string/regex_phone_number" />
 
         </FrameLayout>
@@ -59,25 +68,27 @@
             android:id="@+id/fl_verify_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="20dp">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="start|center_vertical"
                 android:tint="?attr/colorAccent"
-                app:srcCompat="@drawable/ic_password" />
+                android:src="@drawable/lock_1"
+                tools:ignore="VectorDrawableCompat" />
 
             <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
+                android:inputType="textPassword"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
                 android:hint="请输入密码"
                 app:met_clearButton="false"
-                app:met_passWordButton="true"
-                app:met_floatingLabel="normal"
-                app:met_floatingLabelText="密码" />
+                app:met_passWordButton="false"
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelText="password" />
 
 
 
@@ -86,81 +97,55 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
 
-            <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
-                android:id="@+id/tv_other_login"
-                style="@style/TextStyle.Explain"
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkbox_save_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:paddingStart="10dp"
-                android:paddingTop="5dp"
                 android:paddingEnd="10dp"
-                android:paddingBottom="5dp"
-                android:text="其他登录方式"
-                android:textColor="@color/xui_config_color_primary_text" />
-
+                android:text="保存密码"
+                />
             <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
-                android:id="@+id/tv_forget_password"
+                android:id="@+id/tv_login_tips"
                 style="@style/TextStyle.Explain"
+                android:layout_height="match_parent"
+                android:clickable="true"
                 android:layout_gravity="end"
                 android:paddingStart="10dp"
-                android:paddingTop="5dp"
+                android:layout_marginTop="4dp"
+                android:paddingTop="8dp"
                 android:paddingEnd="10dp"
-                android:paddingBottom="5dp"
-                android:text="忘记密码"
+                android:text="没有账号?"
                 android:textColor="@color/xui_config_color_primary_text" />
 
         </FrameLayout>
 
     </LinearLayout>
 
-    <com.xuexiang.xui.widget.textview.supertextview.SuperButton
+    <Button
         android:id="@+id/btn_login"
-        style="@style/SuperButton.Primary.Login"
-        android:layout_marginTop="16dp"
-        android:text="登录" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="24dp"
+        style="@style/Button.Blue"
+        android:text="Login"
+        />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="20dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextStyle.Explain"
-                android:layout_width="wrap_content"
-                android:text="登陆/注册代表您已阅读并同意"
-                android:textColor="@color/xui_config_color_primary_text" />
-
-            <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
-                android:id="@+id/tv_user_protocol"
-                style="@style/TextStyle.Explain"
-                android:layout_width="wrap_content"
-                android:text="用户协议"
-                android:textColor="?attr/colorAccent" />
-
-            <TextView
-                style="@style/TextStyle.Explain"
-                android:layout_width="wrap_content"
-                android:text="和"
-                android:textColor="@color/xui_config_color_primary_text" />
-
-            <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
-                android:id="@+id/tv_privacy_protocol"
-                style="@style/TextStyle.Explain"
-                android:layout_width="wrap_content"
-                android:text="隐私政策"
-                android:textColor="?attr/colorAccent" />
-
-        </LinearLayout>
-
-    </FrameLayout>
+    <ProgressBar
+        android:id="@+id/progress_bar_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="180dp"
+        android:layout_gravity="bottom"
+        style="android:progressBarStyle"
+        android:indeterminate="true"
+        />
 
 
 </LinearLayout>

@@ -7,7 +7,7 @@ public class ClassItemVH {
     public TextView className;
     public TextView classNumber;
     public TextView classCode;
-    public ImageView classDelete;
+    public ImageView classMenu;
 
     @Override
     public String toString() {
@@ -15,7 +15,7 @@ public class ClassItemVH {
                 "className=" + className +
                 ", classNumber=" + classNumber +
                 ", classCode=" + classCode +
-                ", classDelete=" + classDelete +
+                ", classDelete=" + classMenu +
                 '}';
     }
 }

@@ -10,9 +10,9 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.surewang.signteacher"
+        applicationId "com.liufengcheng.signteacher"
         minSdkVersion 19
-        targetSdkVersion 19
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -60,4 +60,6 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.code.gson:gson:2.6.2'
+    // bottom sheet
+    compile 'com.android.support:design:27.1.1'
 }
