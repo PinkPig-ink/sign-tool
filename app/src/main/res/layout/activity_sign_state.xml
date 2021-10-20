@@ -5,31 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".Activity.studentActivity">
+    tools:context=".Activity.SignStateActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:theme="@style/AppTheme.AppBarOverlay">
+
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_student"
+            android:id="@+id/toolbar"
+            app:title="签到"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:title="班级学生"
-            app:titleTextColor="@android:color/white"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ListView
-        android:id="@+id/allStudent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        />
+    <include layout="@layout/content_sign_state" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -114,7 +114,7 @@ public class HomeStudentActivity extends AppCompatActivity {
     // 工具栏菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.item_class_menu, menu);
+        getMenuInflater().inflate(R.menu.item_teacher_menu, menu);
         return true;
     }
     // 菜单事件

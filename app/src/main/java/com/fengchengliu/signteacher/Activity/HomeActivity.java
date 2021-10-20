@@ -22,14 +22,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -63,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case MESSAGE_CREATE_FALL:
                 if (msg.obj == "输入为空")
-                    Toast.makeText(getApplicationContext(), "班级名称不能为空！" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "班级名称不能为空！", Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(HomeActivity.this, "创建失败, 请检查网络连接!", Toast.LENGTH_SHORT).show();
                 break;
@@ -83,13 +79,13 @@ public class HomeActivity extends AppCompatActivity {
         Gson gson = new Gson();
         List<Classes> classList = gson.fromJson(message, new TypeToken<List<Classes>>() {
         }.getType());
-        classAdapter = new ClassAdapter(HomeActivity.this, classList,1);
+        classAdapter = new ClassAdapter(HomeActivity.this, classList, 1);
         listView.setAdapter(classAdapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.teacher_tool_menu, menu);
         return true;
     }
 
@@ -118,7 +114,7 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar!= null)
+        if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         listView = findViewById(R.id.allClass);
@@ -140,7 +136,6 @@ public class HomeActivity extends AppCompatActivity {
 
         });
         getClassData(account);
-        setItemMenuClick();
     }
 
     private void showInputDialog(String account) {
@@ -186,7 +181,7 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }).start();
                 })
-                .setNegativeButton("取消",null)
+                .setNegativeButton("取消", null)
                 .show();
     }
 
@@ -215,20 +210,5 @@ public class HomeActivity extends AppCompatActivity {
             }
         }).start();
     }
-    private void setItemMenuClick() {
-        View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet, null);
-        View bts_sign = view.findViewById(R.id.bts_sign);
-        View bts_member = view.findViewById(R.id.bts_member);
-        View bts_dismiss = view.findViewById(R.id.bts_dismiss);
-        bts_sign.setOnClickListener(v->{
-            Toast.makeText(this,"test",Toast.LENGTH_SHORT).show();
-        });
-        bts_member.setOnClickListener(v->{
-            Toast.makeText(this,"test",Toast.LENGTH_SHORT).show();
 
-        });
-        bts_dismiss.setOnClickListener(v->{
-            Toast.makeText(this,"test",Toast.LENGTH_SHORT).show();
-        });
-    }
 }

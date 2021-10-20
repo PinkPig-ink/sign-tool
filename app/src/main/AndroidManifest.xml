@@ -16,9 +16,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Activity.HomeStudentActivity"
-            android:parentActivityName=".Activity.LoginActivity"
+            android:name=".Activity.SignStateActivity"
+            android:label="@string/title_activity_sign_state"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".Activity.HomeActivity"
             />
+        <activity
+            android:name=".Activity.HomeStudentActivity"
+            android:parentActivityName=".Activity.LoginActivity" />
         <activity android:name=".Activity.studentActivity" />
         <activity
             android:name=".Activity.HomeActivity"

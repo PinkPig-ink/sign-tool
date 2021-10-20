@@ -52,11 +52,13 @@ public class LoginActivity extends AppCompatActivity {
                 // 根据账号类型判断启动不同页面
                 String message = msg.obj.toString();
                 User user = new Gson().fromJson(message, User.class);
+                String name = user.getUserName();
                 Intent intent =null;
                 if (user.getUserType() == 0) {
                     // 学生端 , 进入签到页面
                     intent = new Intent(LoginActivity.this, HomeStudentActivity.class);
                     intent.putExtra("account",Account.getText().toString());
+                    intent.putExtra("name",name);
                 } else if (user.getUserType() == 1) {
                     // 老师端 , 进入班级列表
                     intent = new Intent(LoginActivity.this, HomeActivity.class);

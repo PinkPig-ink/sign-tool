@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Settings, should always be in the overflow -->
+
+    <item android:id="@+id/item_sign"
+        android:title="开始签到"
+        android:orderInCategory="1"
+        app:showAsAction="never"/>
+    <item android:id="@+id/item_show_stus"
+        android:title="查看成员"
+       android:orderInCategory="2"
+        app:showAsAction="never"/>
+    <item android:id="@+id/item_dismiss"
+        android:title="解散班级"
+        android:orderInCategory="3"
+        app:showAsAction="never"/>
+</menu>

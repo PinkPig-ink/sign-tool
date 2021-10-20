@@ -1,0 +1,16 @@
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/swipeFlash"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="56dp"
+    >
+    <ListView
+        android:id="@+id/allStates"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:divider="#00000000"
+        android:dividerHeight="20dp"/>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
