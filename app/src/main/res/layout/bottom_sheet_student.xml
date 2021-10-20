@@ -12,15 +12,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bts_sign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="12dp"
-            android:clickable="true"
             android:paddingBottom="10dp"
             >
             <ImageView
-                android:id="@+id/btm_sign"
+                android:id="@+id/btm_stu_sign"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="20dp"
@@ -32,24 +30,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:text="发起签到"
+                android:text="立即签到"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginStart="40dp"
-                app:layout_constraintLeft_toRightOf="@id/btm_sign"
+                app:layout_constraintLeft_toRightOf="@id/btm_stu_sign"
                 app:layout_constraintTop_toTopOf="parent"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bts_member"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="12dp"
-            android:clickable="true"
             android:paddingBottom="10dp"
             >
         <ImageView
-            android:id="@+id/btm_stu_num"
+            android:id="@+id/btm_number_student"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
@@ -65,21 +61,19 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginStart="40dp"
-            app:layout_constraintLeft_toRightOf="@id/btm_stu_num"
+            app:layout_constraintLeft_toRightOf="@id/btm_number_student"
             app:layout_constraintTop_toTopOf="parent"
             />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bts_dismiss"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="12dp"
-            android:clickable="true"
             android:paddingBottom="10dp"
             >
         <ImageView
-            android:id="@+id/btm_dismiss"
+            android:id="@+id/btm_stu_quit"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="20dp"
@@ -90,12 +84,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:text="解散班级"
+            android:text="退出班级"
             android:textStyle="bold"
             android:textColor="@color/app_color_theme_1"
             android:textSize="16sp"
             android:layout_marginStart="40dp"
-            app:layout_constraintLeft_toRightOf="@id/btm_dismiss"
+            app:layout_constraintLeft_toRightOf="@id/btm_stu_quit"
             app:layout_constraintTop_toTopOf="parent"
             />
         </androidx.constraintlayout.widget.ConstraintLayout>

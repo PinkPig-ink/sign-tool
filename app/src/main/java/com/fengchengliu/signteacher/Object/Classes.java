@@ -1,4 +1,4 @@
-package com.fengchengliu.signteacher.entity;
+package com.fengchengliu.signteacher.Object;
 
 import com.google.gson.annotations.SerializedName;
 

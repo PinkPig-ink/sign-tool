@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.fengchengliu.signteacher.myApp"
+        android:name=".Activity.myApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,14 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.fengchengliu.signteacher.studentActivity"></activity>
         <activity
-            android:name="com.fengchengliu.signteacher.HomeActivity"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".LoginActivity"
+            android:name=".Activity.HomeStudentActivity"
+            android:parentActivityName=".Activity.LoginActivity"
             />
-        <activity android:name="com.fengchengliu.signteacher.LoginActivity">
+        <activity android:name=".Activity.studentActivity" />
+        <activity
+            android:name=".Activity.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:parentActivityName=".Activity.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

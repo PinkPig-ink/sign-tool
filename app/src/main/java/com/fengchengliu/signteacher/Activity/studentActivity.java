@@ -1,4 +1,4 @@
-package com.fengchengliu.signteacher;
+package com.fengchengliu.signteacher.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,23 +12,26 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.fengchengliu.signteacher.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import com.fengchengliu.signteacher.Adapter.StudentAdapter;
-import com.fengchengliu.signteacher.entity.User;
+import com.fengchengliu.signteacher.Object.User;
 
 
 import java.util.List;
 
 public class studentActivity extends AppCompatActivity {
     private ListView listView;
+    private String contentBody;
+
+
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             switch (msg.what) {
                 case 1:
                     dealDate((String) msg.obj);
@@ -47,11 +50,6 @@ public class studentActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 Log.d("点击","点击了");
-//                Intent intent = new Intent(studentActivity.this,studentActivity.class);
-//                TextView classID = (TextView) arg1.findViewById(R.id.classId);
-//                String classId = classID.getText().toString();
-//                intent.putExtra("classId",classId);
-//                startActivity(intent);
             }
         });
 
@@ -63,17 +61,8 @@ public class studentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student);
         Toolbar toolbar = findViewById(R.id.toolbar_student);
         setSupportActionBar(toolbar);
-        //悬浮的按钮
-        FloatingActionButton fab = findViewById(R.id.fab_student);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-
         listView = findViewById(R.id.allStudent);
+
     }
 
 

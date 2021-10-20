@@ -1,16 +1,16 @@
-package com.fengchengliu.signteacher;
+package com.fengchengliu.signteacher.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.os.Bundle;
 
+import com.fengchengliu.signteacher.R;
 import com.fengchengliu.signteacher.Utils.RandomNum;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.fengchengliu.signteacher.Adapter.ClassAdapter;
-import com.fengchengliu.signteacher.entity.Classes;
+import com.fengchengliu.signteacher.Object.Classes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -22,10 +22,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,7 +83,7 @@ public class HomeActivity extends AppCompatActivity {
         Gson gson = new Gson();
         List<Classes> classList = gson.fromJson(message, new TypeToken<List<Classes>>() {
         }.getType());
-        classAdapter = new ClassAdapter(HomeActivity.this, classList);
+        classAdapter = new ClassAdapter(HomeActivity.this, classList,1);
         listView.setAdapter(classAdapter);
     }
 
@@ -138,10 +140,7 @@ public class HomeActivity extends AppCompatActivity {
 
         });
         getClassData(account);
-        listView.setOnLongClickListener(v->{
-            Toast.makeText(HomeActivity.this,"长按",Toast.LENGTH_SHORT).show();
-            return false;
-        });
+        setItemMenuClick();
     }
 
     private void showInputDialog(String account) {
@@ -216,5 +215,20 @@ public class HomeActivity extends AppCompatActivity {
             }
         }).start();
     }
+    private void setItemMenuClick() {
+        View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet, null);
+        View bts_sign = view.findViewById(R.id.bts_sign);
+        View bts_member = view.findViewById(R.id.bts_member);
+        View bts_dismiss = view.findViewById(R.id.bts_dismiss);
+        bts_sign.setOnClickListener(v->{
+            Toast.makeText(this,"test",Toast.LENGTH_SHORT).show();
+        });
+        bts_member.setOnClickListener(v->{
+            Toast.makeText(this,"test",Toast.LENGTH_SHORT).show();
 
+        });
+        bts_dismiss.setOnClickListener(v->{
+            Toast.makeText(this,"test",Toast.LENGTH_SHORT).show();
+        });
+    }
 }

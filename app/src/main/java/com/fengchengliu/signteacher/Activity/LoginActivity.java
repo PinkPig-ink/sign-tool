@@ -1,9 +1,7 @@
-package com.fengchengliu.signteacher;
+package com.fengchengliu.signteacher.Activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +9,6 @@ import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,13 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.fengchengliu.signteacher.entity.User;
+import com.fengchengliu.signteacher.R;
+import com.fengchengliu.signteacher.Object.User;
 import com.google.gson.Gson;
 
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
@@ -56,16 +52,19 @@ public class LoginActivity extends AppCompatActivity {
                 // 根据账号类型判断启动不同页面
                 String message = msg.obj.toString();
                 User user = new Gson().fromJson(message, User.class);
-
+                Intent intent =null;
                 if (user.getUserType() == 0) {
                     // 学生端 , 进入签到页面
-
+                    intent = new Intent(LoginActivity.this, HomeStudentActivity.class);
+                    intent.putExtra("account",Account.getText().toString());
                 } else if (user.getUserType() == 1) {
                     // 老师端 , 进入班级列表
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    intent = new Intent(LoginActivity.this, HomeActivity.class);
                     intent.putExtra("account", Account.getText().toString());
-                    startActivity(intent);
+
                 }
+                if(intent != null)
+                    startActivity(intent);
                 Log.d("user_login", user.toString());
 
                 // startActivity(intent);

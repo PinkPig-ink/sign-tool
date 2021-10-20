@@ -6,11 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.fengchengliu.signteacher.R;
 import com.fengchengliu.signteacher.ViewHolder.StudentItemVH;
-import com.fengchengliu.signteacher.entity.User;
+import com.fengchengliu.signteacher.Object.User;
 
 import java.util.List;
 
@@ -45,8 +44,8 @@ public class StudentAdapter extends BaseAdapter {
         if(convertView==null){
             holder = new StudentItemVH();
             convertView = inflater.inflate(R.layout.item_student,null);
-            holder.studentName =  (TextView) convertView.findViewById(R.id.studentName);
-            holder.signStatus = (TextView)convertView.findViewById(R.id.signStatus);
+            holder.studentName = convertView.findViewById(R.id.studentName);
+            holder.signStatus = convertView.findViewById(R.id.signStatus);
 
             convertView.setTag(holder);
         }else{

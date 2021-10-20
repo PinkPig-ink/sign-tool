@@ -1,22 +1,15 @@
 package com.fengchengliu.signteacher.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.PopupMenu;
-import android.widget.Toast;
 
-import com.fengchengliu.signteacher.HomeActivity;
 import com.fengchengliu.signteacher.R;
 import com.fengchengliu.signteacher.ViewHolder.ClassItemVH;
-import com.fengchengliu.signteacher.entity.Classes;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.fengchengliu.signteacher.Object.Classes;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.xuexiang.xui.widget.dialog.bottomsheet.BottomSheet;
 
 import java.util.List;
 
@@ -25,11 +18,13 @@ public class ClassAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     List<Classes> list;
     private final Context mContext;
+    private final int type;
 
-    public ClassAdapter(Context context, List<Classes> list) {
+    public ClassAdapter(Context context, List<Classes> list, int type) {
         this.mContext = context;
         this.inflater = LayoutInflater.from(context);
         this.list = list;
+        this.type = type;
     }
 
     @Override
@@ -64,48 +59,27 @@ public class ClassAdapter extends BaseAdapter {
         // 数据源的赋值
         holder.className.setText(list.get(position).getClassName());
         holder.classCode.setText(list.get(position).getClassKey());
-        holder.classNumber.setText(list.get(position).getClassNumber() + "人");
+        holder.classNumber.setText(list.size() + "人");
         holder.classMenu.setTag(position);
         // 选项栏设置
         holder.classMenu.setOnClickListener(v -> {
-            // showPupMenu(mContext,holder.classMenu);
-            onBottomSheet(holder.classMenu);
+            onBottomSheet();
         });
-
         return convertView;
     }
 
-    public void onBottomSheet(View view) {
-        BottomSheetDialog dialog=new BottomSheetDialog(mContext);
-        dialog.setContentView(R.layout.bottom_sheet);
+    public void onBottomSheet() {
+
+        BottomSheetDialog dialog = new BottomSheetDialog(mContext);
+        if (this.type == 1)
+            dialog.setContentView(R.layout.bottom_sheet);
+        else
+            dialog.setContentView(R.layout.bottom_sheet_student);
         dialog.show();
     }
-    // 弹出式菜单
-    public void showPupMenu(Context context, View view){
-        PopupMenu popupMenu = new PopupMenu(context, view);
-        popupMenu.getMenuInflater().inflate(R.menu.item_class_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(item -> {
-            String info = "";
-            switch (item.getItemId()) {
-                case R.id.action_startSign:
-                    Log.d("itemMenu", "id: " + item.getItemId());
-                    info = "开始签到..";
 
-                    break;
-                case R.id.action_showStudents:
-                    Log.d("itemMenu", "id: " + item.getItemId());
-                    info = "显示学生";
-                    break;
-                case R.id.action_dismissClass:
-                    Log.d("itemMenu", "id: " + item.getItemId());
-                    info = "解散班级";
-                    break;
-            }
-            Toast.makeText(mContext, info,
-                    Toast.LENGTH_LONG).show();
-            return true;
-        });
-        popupMenu.show();
-    }
+
+
+
 
 }
