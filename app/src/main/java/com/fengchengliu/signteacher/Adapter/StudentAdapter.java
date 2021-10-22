@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.fengchengliu.signteacher.Object.Student;
 import com.fengchengliu.signteacher.R;
@@ -86,10 +87,11 @@ public class StudentAdapter extends BaseAdapter {
             switch (item.getItemId()) {
                 case R.id.action_come:
                     // 修改为已签到
-
+                    Toast.makeText(mContext,"功能即将上线",Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.action_no_come:
                     // 修改为未签到
+                    Toast.makeText(mContext,"功能即将上线",Toast.LENGTH_SHORT).show();
                     break;
             }
             return true;

@@ -33,9 +33,10 @@ public class LoginActivity extends AppCompatActivity {
     static int MSG_SUCCESS = 1;
     static int MSG_FALL = 0;
     private ProgressBar progress;
-    private EditText Account;
-    private EditText Password;
-    private CheckBox CheckBox;
+    private EditText account;
+    private EditText password;
+    private CheckBox checkBox;
+    private SharedPreferences sp;
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -45,55 +46,48 @@ public class LoginActivity extends AppCompatActivity {
             if (msg.what == MSG_SUCCESS) {
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 //保存登录的状态和用户名
-                Log.d("得到 account ", Account.getText().toString());
-                //登录成功的状态保存到MainActivity
-                if (Account != null && Password != null && CheckBox != null)
-                    saveLoginStatus(Account.getText().toString(), Password.getText().toString(), CheckBox.isSelected());
+                Log.d("得到 account ", account.getText().toString());
+
+
                 // 根据账号类型判断启动不同页面
                 String message = msg.obj.toString();
                 User user = new Gson().fromJson(message, User.class);
                 String name = user.getUserName();
-                Intent intent =null;
+                Intent intent = null;
                 if (user.getUserType() == 0) {
                     // 学生端 , 进入签到页面
                     intent = new Intent(LoginActivity.this, HomeStudentActivity.class);
-                    intent.putExtra("account",Account.getText().toString());
-                    intent.putExtra("name",name);
+                    intent.putExtra("account", account.getText().toString());
+                    intent.putExtra("name", name);
                 } else if (user.getUserType() == 1) {
                     // 老师端 , 进入班级列表
                     intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    intent.putExtra("account", Account.getText().toString());
+                    intent.putExtra("account", account.getText().toString());
 
                 }
-                if(intent != null)
+                if (intent != null)
                     startActivity(intent);
                 Log.d("user_login", user.toString());
 
                 // startActivity(intent);
             } else if (msg.what == MSG_FALL) {
-                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "登陆失败，密码或网络错误", Toast.LENGTH_SHORT).show();
             }
             return false;
         }
 
     });
 
-    private void saveLoginStatus(String account, String password, boolean isSavedPassword) {
-        SharedPreferences preference = getSharedPreferences("user", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preference.edit();
-        editor.putString("password", password);
-        editor.putString("account", account);
-        editor.putBoolean("checkState", true);
-        editor.apply();
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Account = findViewById(R.id.userAccount);
-        Password = findViewById(R.id.password);
-        CheckBox = findViewById(R.id.checkbox_save_password);
+        account = findViewById(R.id.userAccount);
+        password = findViewById(R.id.password);
+        checkBox = findViewById(R.id.checkbox_save_password);
+        sp = getSharedPreferences("user",MODE_PRIVATE);
         Button login = findViewById(R.id.btn_login);
         progress = findViewById(R.id.progress_bar_login);
         progress.setVisibility(View.INVISIBLE);
@@ -102,24 +96,27 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "请联系您的学校老师获取您的账号和密码", Toast.LENGTH_SHORT)
                     .show();
         });
+        account.setText(sp.getString("account",""));
 
-        SharedPreferences user = getSharedPreferences("user", MODE_PRIVATE);
-        String saveAccount = user.getString("account", "");
-        String savePassword = user.getString("password", "");
-        CheckBox.setSelected(user.getBoolean("checkState", false));
-        Account.setText(saveAccount);
-        Password.setText(savePassword);
+
+        checkBox.setChecked(sp.getBoolean("check",false));
+
         login.setOnClickListener(v -> {
             progress.setVisibility(View.VISIBLE);
-            String account = Account.getText().toString();
-            String password = Password.getText().toString();
+            String account = this.account.getText().toString();
+            String password = this.password.getText().toString();
+            SharedPreferences.Editor editor = sp.edit();
             if (TextUtils.isEmpty(account)) {
                 Toast.makeText(LoginActivity.this, "请输入用户名", Toast.LENGTH_SHORT).show();
                 return;
             } else if (TextUtils.isEmpty(password)) {
                 Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                 return;
-            } else if (true) {
+            } else {
+                editor.putString("account",account);
+                editor.putString("password",password);
+                editor.putBoolean("check",checkBox.isChecked());
+                editor.apply();
                 new Thread(() -> {
                     Message msg = Message.obtain();
                     String message = null;
@@ -161,6 +158,9 @@ public class LoginActivity extends AppCompatActivity {
                 }).start();
             }
         });
+        if (sp.getBoolean("check",false))
+            password.setText(sp.getString("password",""));
+
     }
 
 

@@ -55,8 +55,6 @@
                 android:layout_marginStart="36dp"
                 android:hint="请输入账号"
 
-                app:met_clearButton="true"
-                app:met_errorMessage="@string/tip_phone_number_error"
                 app:met_floatingLabel="highlight"
                 app:met_floatingLabelText="account"
                 app:met_regexp="@string/regex_phone_number" />
@@ -100,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp">
 
-            <com.google.android.material.checkbox.MaterialCheckBox
+            <CheckBox
                 android:id="@+id/checkbox_save_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
