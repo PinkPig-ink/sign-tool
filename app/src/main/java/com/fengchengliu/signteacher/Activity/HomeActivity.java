@@ -2,6 +2,10 @@ package com.fengchengliu.signteacher.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.fengchengliu.signteacher.R;
@@ -16,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
@@ -39,14 +44,21 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HomeActivity extends AppCompatActivity {
+    private String account = null;
 
     private ListView listView;
     private ClassAdapter classAdapter;
     private String contentBody;
-    final static int MESSAGE_CREATE_SUCCESS = 1;
-    final static int MESSAGE_CREATE_FALL = 0;
-    final static int MESSAGE_GET_SUCCESS = 2;
-    final static int MESSAGE_REFRESH_SUCCESS = 3;
+    public final static int MESSAGE_CREATE_FALL = 0;
+    public final static int MESSAGE_CREATE_SUCCESS = 1;
+    public final static int MESSAGE_GET_SUCCESS = 2;
+    public final static int MESSAGE_REFRESH_SUCCESS = 3;
+    public static final int MESSAGE_SET_ZERO_SUCCESS = 4;
+    public static final int MESSAGE_SET_ZERO_FALL = 5;
+    public static final int MESSAGE_SET_CODE_SUCCESS = 6;
+    public static final int MESSAGE_SET_CODE_FALL = 7;
+    public static final int MESSAGE_GET_NUM_SUCCESS = 8;
+
     Handler handler = new Handler((msg) -> {
         switch (msg.what) {
             case MESSAGE_GET_SUCCESS:
@@ -65,12 +77,14 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case MESSAGE_REFRESH_SUCCESS:
                 getClassData((String) msg.obj);
-                if (contentBody != null)
+                if (contentBody != null) {
                     dealDate(contentBody);
-                Log.d("debug:: ", contentBody);
-                classAdapter.notifyDataSetChanged();
-                Toast.makeText(HomeActivity.this, "刷新完成!", Toast.LENGTH_SHORT).show();
+                    Log.d("debug:: ", contentBody);
+                    classAdapter.notifyDataSetChanged();
+                    Toast.makeText(HomeActivity.this, "刷新完成!", Toast.LENGTH_SHORT).show();
+                }
                 break;
+
         }
         return false;
     });
@@ -79,7 +93,7 @@ public class HomeActivity extends AppCompatActivity {
         Gson gson = new Gson();
         List<Classes> classList = gson.fromJson(message, new TypeToken<List<Classes>>() {
         }.getType());
-        classAdapter = new ClassAdapter(HomeActivity.this, classList, 1);
+        classAdapter = new ClassAdapter(HomeActivity.this, classList, 1,account);
         listView.setAdapter(classAdapter);
     }
 
@@ -89,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
+    // 右上角菜单
     @SuppressLint("ResourceType")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -113,12 +128,9 @@ public class HomeActivity extends AppCompatActivity {
         // toolBar的设置
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
 
         listView = findViewById(R.id.allClass);
-        String account = getIntent().getStringExtra("account");
+        account = getIntent().getStringExtra("account");
         //悬浮的按钮
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
@@ -211,4 +223,32 @@ public class HomeActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void setClassNum(String classKey) {
+        new Thread(() -> {
+            Message msg = Message.obtain();
+            final OkHttpClient client = new OkHttpClient();
+            String url = "http://116.63.131.15:9001/getStateByClassKey?classKey=" + classKey;
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    if (response.body().contentLength() != 0) {
+                        String message = response.body().string();
+                        Gson gson = new Gson();
+                        List<Classes> classList = gson.fromJson(message, new TypeToken<List<Classes>>() {
+                        }.getType());
+                        msg.arg1 = classList.size();
+                        Log.d("size::" ,"个数："+msg.arg1);
+                        msg.what = MESSAGE_GET_NUM_SUCCESS;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+    }
 }

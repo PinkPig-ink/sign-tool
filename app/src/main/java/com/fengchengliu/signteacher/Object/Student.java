@@ -11,7 +11,6 @@ public class Student {
     private int state;
     @SerializedName("location")
     private String location;
-
     @Override
     public String toString() {
         return "Student{" +

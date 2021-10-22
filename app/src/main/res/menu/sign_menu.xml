@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_start_sign"
+        android:icon="@drawable/navigation"
+        android:title="开始签到"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_done_sign"
+        android:icon="@drawable/stop"
+        android:title="结束签到"
+        app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/action_update_data"
+        android:icon="@drawable/refresh"
+        android:title="更新订阅"
+        app:showAsAction="ifRoom|withText"/>
+</menu>

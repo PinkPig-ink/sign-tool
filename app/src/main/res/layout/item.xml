@@ -7,8 +7,9 @@
     android:layout_height="wrap_content"
     app:contentPadding="24dp"
     cardView:cardCornerRadius="24dp"
-    app:cardBackgroundColor="@color/color_f4"
     android:translationZ="2dp"
+    android:background="@android:color/white"
+
     cardView:cardElevation="12dp"
 
     >

@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:textAlignment="textStart"
             app:title="登录"
-            app:titleTextColor="@color/menu_white_pressed"
+            app:titleTextColor="@android:color/white"
             android:translationZ="20dp"
             android:elevation="15dp"
             android:layout_height="?attr/actionBarSize"

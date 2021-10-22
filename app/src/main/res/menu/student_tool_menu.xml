@@ -8,7 +8,7 @@
         app:showAsAction="never"/>
 
     <item android:id="@+id/action_person"
-        android:title="个人信息"
+        android:title="位置信息"
         android:orderInCategory="3"
         app:showAsAction="never"/>
 </menu>

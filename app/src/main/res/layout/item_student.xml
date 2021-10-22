@@ -2,12 +2,11 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:contentPadding="24dp"
+    android:background="@android:color/white"
     cardView:cardCornerRadius="24dp"
-    app:cardBackgroundColor="@color/color_f4"
     android:clickable="true"
     android:translationZ="2dp"
     cardView:cardElevation="12dp"
@@ -16,12 +15,15 @@
 
 
     <RelativeLayout
+        android:background="@android:color/white"
+
         android:id="@+id/the_class"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/item_list_iv_list"
+            android:layout_marginTop="20dp"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:src="@drawable/sleep" />
@@ -56,8 +58,20 @@
             android:layout_toRightOf="@+id/item_list_iv_list"
 
             android:layout_below="@+id/studentId"
-
             />
+
+        <TextView
+            android:id="@+id/signPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@id/item_list_iv_list"
+            android:layout_below="@id/studentName"
+            android:text="签到地址xxxx" />
+
         <TextView
             android:id="@+id/signStatus"
             android:layout_width="wrap_content"
@@ -66,6 +80,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:text="未签到"
+            android:textColor="@android:color/holo_red_dark"
             android:textSize="20dp"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/studentId"
