@@ -29,6 +29,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -95,6 +97,12 @@ public class HomeActivity extends AppCompatActivity {
         }.getType());
         classAdapter = new ClassAdapter(HomeActivity.this, classList, 1,account);
         listView.setAdapter(classAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                updateItem(position);
+            }
+        });
     }
 
     @Override
@@ -223,32 +231,17 @@ public class HomeActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void setClassNum(String classKey) {
-        new Thread(() -> {
-            Message msg = Message.obtain();
-            final OkHttpClient client = new OkHttpClient();
-            String url = "http://116.63.131.15:9001/getStateByClassKey?classKey=" + classKey;
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-            try {
-                Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    assert response.body() != null;
-                    if (response.body().contentLength() != 0) {
-                        String message = response.body().string();
-                        Gson gson = new Gson();
-                        List<Classes> classList = gson.fromJson(message, new TypeToken<List<Classes>>() {
-                        }.getType());
-                        msg.arg1 = classList.size();
-                        Log.d("size::" ,"个数："+msg.arg1);
-                        msg.what = MESSAGE_GET_NUM_SUCCESS;
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
+    private void updateItem(int position) {
+        /**第一个可见的位置**/
+        int firstVisiblePosition = listView.getFirstVisiblePosition();
+        /**最后一个可见的位置**/
+        int lastVisiblePosition = listView.getLastVisiblePosition();
 
+        /**在看见范围内才更新，不可见的滑动后自动会调用getView方法更新**/
+        if (position >= firstVisiblePosition && position <= lastVisiblePosition) {
+            /**获取指定位置view对象**/
+            View view = listView.getChildAt(position - firstVisiblePosition);
+            classAdapter.getView(position, view, listView);
+        }
     }
 }

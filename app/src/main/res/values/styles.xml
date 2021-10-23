@@ -6,9 +6,13 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
-
-
+<!--    启动样式-->
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="windowNoTitle">true</item><!--无标题-->
+        <item name="android:windowFullscreen">true</item><!--全屏-->
+        <item name="android:windowIsTranslucent">true</item><!--半透明-->
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
     <!--XVideo-->
     <style name="XVideoNoBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->

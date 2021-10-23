@@ -8,6 +8,10 @@
     app:contentPadding="24dp"
     cardView:cardCornerRadius="24dp"
     android:translationZ="2dp"
+    android:clickable="false"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:focusable="false"
+
     android:background="@android:color/white"
 
     cardView:cardElevation="12dp"

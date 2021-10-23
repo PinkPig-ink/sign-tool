@@ -20,6 +20,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.fengchengliu.signteacher.Activity.HomeActivity;
 import com.fengchengliu.signteacher.Activity.HomeStudentActivity;
 import com.fengchengliu.signteacher.Activity.SignStateActivity;
+import com.fengchengliu.signteacher.Object.Student;
 import com.fengchengliu.signteacher.R;
 import com.fengchengliu.signteacher.Utils.RandomNum;
 import com.fengchengliu.signteacher.ViewHolder.ClassItemVH;
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +53,7 @@ public class ClassAdapter extends BaseAdapter {
     private String location;
     private String rightCode = null;
     public int[] classNum = {1, 2, 3, 4, 5, 6, 7, 8};
+    private final HashMap<String, Integer> hashMap = new HashMap<>();
 
     public ClassAdapter(Context context, List<Classes> list, int type, String account) {
         this.account = account;
@@ -101,10 +104,20 @@ public class ClassAdapter extends BaseAdapter {
         }
         // 数据源的赋值
         holder.className.setText(list.get(position).getClassName());
-        holder.classCode.setText(list.get(position).getClassKey());
         // setClassNum(holder.classCode.getText().toString());
-        holder.classNumber.setText(classNum[position] + "人");
+        String classKey = list.get(position).getClassKey();
+        new Thread(()->{
+            setClassNum(classKey);
+        }).start();
 
+        int num;
+        if (hashMap.get(classKey) == null)
+            num = 0;
+        else
+            num = hashMap.get(classKey);
+        holder.classNumber.setText(num + "人");
+        holder.classCode.setText(classKey);
+        Log.d("hashMap", hashMap.toString() + "test");
         holder.classMenu.setTag(position);
         // 选项栏设置
         holder.classMenu.setOnClickListener(v -> {
@@ -296,6 +309,31 @@ public class ClassAdapter extends BaseAdapter {
                     code = response.body().string();
                     Log.d("网络获取的签到码", "签到码" + code);
                     rightCode = code;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        ).start();
+    }
+
+    private void setClassNum(String classKey) {
+        new Thread(() -> {
+            String msg;
+            OkHttpClient client = new OkHttpClient();
+            String url = "http://116.63.131.15:9001/getStateByClassKey?classKey=" + classKey;
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            try (Response response = client.newCall(request).execute()) {
+                if (response.isSuccessful()) {
+                    msg = response.body().string();
+                    Gson gson = new Gson();
+                    List<Student> list = gson.fromJson(msg, new TypeToken<List<Student>>() {
+                    }.getType());
+                    int num = list.size();
+                    Log.d("hashMap", "数据" + num + "个  ");
+                    hashMap.put(classKey, num);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

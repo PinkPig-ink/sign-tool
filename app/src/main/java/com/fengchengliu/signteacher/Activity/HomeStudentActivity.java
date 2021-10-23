@@ -19,6 +19,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -191,6 +193,12 @@ public class HomeStudentActivity extends AppCompatActivity {
         }.getType());
         classAdapter = new ClassAdapter(HomeStudentActivity.this, classList,0,account,moreAddress);
         listView.setAdapter(classAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                updateItem(position);
+            }
+        });
     }
 
 
@@ -281,4 +289,18 @@ public class HomeStudentActivity extends AppCompatActivity {
                 break;
         }
     }
+    private void updateItem(int position) {
+        /**第一个可见的位置**/
+        int firstVisiblePosition = listView.getFirstVisiblePosition();
+        /**最后一个可见的位置**/
+        int lastVisiblePosition = listView.getLastVisiblePosition();
+
+        /**在看见范围内才更新，不可见的滑动后自动会调用getView方法更新**/
+        if (position >= firstVisiblePosition && position <= lastVisiblePosition) {
+            /**获取指定位置view对象**/
+            View view = listView.getChildAt(position - firstVisiblePosition);
+            classAdapter.getView(position, view, listView);
+        }
+    }
+
 }
