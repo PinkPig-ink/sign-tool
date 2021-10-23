@@ -60,13 +60,8 @@ public class SignStateActivity extends AppCompatActivity {
     private String contentBody = null;
     private String classKey = null;
     private ProgressBar progressBar = null;
-    private final Thread th = new Thread() {
-        @Override
-        public void run() {
-            handler.postDelayed(this, 10);
-            handler.sendEmptyMessage(10);
-        }
-    };
+    private int count = 0;
+
     Handler handler = new Handler((msg) -> {
         switch (msg.what) {
             case MESSAGE_GET_SUCCESS:
@@ -91,21 +86,11 @@ public class SignStateActivity extends AppCompatActivity {
             case MESSAGE_SET_CODE_FALL:
                 // Toast.makeText(this,"网络错误",Toast.LENGTH_SHORT).show();
                 break;
-            case 10:
-                int progress = progressBar.getProgress();
-                if (progress == 100) {
-                    progress = 0;
-                } else {
-                    progress += 3;
-                }
-                progressBar.setProgress(progress);
-                break;
             case 11:
 
                 progressBar.setProgress(100);
                 break;
-            default:
-                Toast.makeText(this, "网络错误", Toast.LENGTH_SHORT).show();
+
         }
         return false;
     });
@@ -142,13 +127,13 @@ public class SignStateActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_start_sign:
-                progressBar.setProgress(20);
-                handler.postDelayed(th, 0);
+                progressBar.setProgress(0);
+
                 postSign(classKey);
                 break;
             case R.id.action_done_sign:
-                handler.removeCallbacks(th);
-                handler.sendEmptyMessage(11);
+
+                progressBar.setProgress(100);
                 stopSign();
                 break;
             case R.id.action_update_data:
@@ -209,7 +194,7 @@ public class SignStateActivity extends AppCompatActivity {
     private void postSign(String classKey) {
         setStateZero(classKey);
         TextView tvSignCode = findViewById(R.id.tv_sign_code);
-        String signCode = RandomNum.createRandomString(6).toUpperCase();
+        String signCode = (int)((Math.random()*9+1)*1000)+"";
         tvSignCode.setText("签到码：" + signCode);
         tvSignCode.setTextColor(Color.GREEN);
         sendCodeToClass(signCode);

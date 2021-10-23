@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+import kotlin.reflect.KVariance;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -53,7 +58,15 @@ public class ClassAdapter extends BaseAdapter {
     private String location;
     private String rightCode = null;
     private final HashMap<String, Integer> hashMap = new HashMap<>();
-
+    Handler handler = new Handler(msg -> {
+        switch (msg.what) {
+            case 1:
+                rightCode = (String) msg.obj;
+                Log.d("签到","签到吗："+rightCode);
+                break;
+        }
+       return false;
+    });
     public ClassAdapter(Context context, List<Classes> list, int type, String account) {
         this.account = account;
         this.mContext = context;
@@ -237,6 +250,12 @@ public class ClassAdapter extends BaseAdapter {
         AlertDialog.Builder inputDialog =
                 new AlertDialog.Builder(mContext);
         inputDialog.setTitle("请输入老师提供的签到码").setView(editText);
+        Runnable runnable = () -> getSignCode(classKey);
+        ScheduledExecutorService service = Executors
+                .newSingleThreadScheduledExecutor();
+        // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
+        service.scheduleAtFixedRate(runnable, 0, 1, TimeUnit.SECONDS);
+        runnable.run();
         inputDialog.setPositiveButton("确定",
                 (dialog, which) -> {
                     // 签到码
@@ -245,8 +264,9 @@ public class ClassAdapter extends BaseAdapter {
                         signCode = "errorCode";
                     else
                         signCode = editText.getText().toString();
-                    getSignCode(classKey);
-                    Log.d("查看签到参数：", "rightCode " + rightCode + " + getCode " + signCode);
+
+
+                Log.d("查看签到参数：", "rightCode " + rightCode + " + getCode " + signCode);
                     if (signCode.equals(rightCode)) {
                         postSign(classKey, account, location);
                         Log.d("签到", account + classKey + location + "信息");
@@ -287,7 +307,7 @@ public class ClassAdapter extends BaseAdapter {
         // 签到流程：生成签到码，把学生的签到位置零，在把签到码显示在顶部
         // 开始一个活动，显示这个班所有学生的签到情况
         // 随机生成签到码
-        String code = RandomNum.createRandomString(6).toUpperCase();
+        String code = (int)((Math.random()*9+1)*1000)+"";
         Intent intent = new Intent(mContext, SignStateActivity.class);
         intent.putExtra("signCode", code);
         intent.putExtra("classKey", classKey);
@@ -297,6 +317,7 @@ public class ClassAdapter extends BaseAdapter {
     // 获取签到码
     private void getSignCode(String classKey) {
         new Thread(() -> {
+            Message msg = Message.obtain();
             String code;
             OkHttpClient client = new OkHttpClient();
             String url = "http://116.63.131.15:9001/getCode?classKey=" + classKey;
@@ -307,10 +328,13 @@ public class ClassAdapter extends BaseAdapter {
                 if (response.isSuccessful()) {
                     code = response.body().string();
                     Log.d("网络获取的签到码", "签到码" + code);
-                    rightCode = code;
+                    msg.what = 1;
+                    msg.obj = code;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }finally {
+                handler.sendMessage(msg);
             }
         }
         ).start();

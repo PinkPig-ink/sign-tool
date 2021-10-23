@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".Activity.Register.RegisternameOccupation"
+    android:orientation="vertical">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/register_toolbar"
+            android:layout_width="match_parent"
+            android:textAlignment="textStart"
+            app:title="注册"
+            app:titleTextColor="@android:color/white"
+            android:translationZ="20dp"
+            android:elevation="15dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+
+            />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="告诉我们您的职业.."
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="100dp"
+        android:textAlignment="center"
+        android:height="45dp"
+        android:textSize="30sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+
+        android:orientation="horizontal">
+
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/teacher"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:checked="true"
+                android:text="老师"
+                android:textSize="30sp" />
+
+            <RadioButton
+                android:id="@+id/student"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:text="学生"
+                android:textSize="30sp"
+
+                />
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/next1"
+        style="@style/Button.Blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="120dp"
+        android:text="下一步" />
+
+</LinearLayout>

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.fengchengliu.signteacher.Activity.Register.Registername;
 import com.fengchengliu.signteacher.R;
 import com.fengchengliu.signteacher.Object.User;
 import com.google.gson.Gson;
@@ -93,8 +94,8 @@ public class LoginActivity extends AppCompatActivity {
         progress.setVisibility(View.INVISIBLE);
         TextView tv_help = findViewById(R.id.tv_login_tips);
         tv_help.setOnClickListener(v -> {
-            Toast.makeText(this, "请联系您的学校老师获取您的账号和密码", Toast.LENGTH_SHORT)
-                    .show();
+            Intent intent = new Intent(LoginActivity.this, Registername.class);
+            startActivity(intent);
         });
         account.setText(sp.getString("account",""));
 

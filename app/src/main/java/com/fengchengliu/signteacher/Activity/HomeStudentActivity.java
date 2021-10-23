@@ -1,6 +1,7 @@
 package com.fengchengliu.signteacher.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,10 +12,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -26,10 +32,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.fengchengliu.signteacher.Adapter.ClassAdapter;
-import com.fengchengliu.signteacher.Listener.MyLocationListener;
 import com.fengchengliu.signteacher.R;
 import com.fengchengliu.signteacher.Object.Classes;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -47,6 +54,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.Manifest.permission.INTERNET;
 import static com.fengchengliu.signteacher.Activity.HomeActivity.MESSAGE_CREATE_FALL;
 import static com.fengchengliu.signteacher.Activity.HomeActivity.MESSAGE_CREATE_SUCCESS;
 import static com.fengchengliu.signteacher.Activity.HomeActivity.MESSAGE_GET_SUCCESS;
@@ -58,10 +66,12 @@ public class HomeStudentActivity extends AppCompatActivity {
     private ListView listView;
     private ClassAdapter classAdapter;
     private String contentBody = null;
-    public LocationClient mLocationClient = null;
-    private MyLocationListener myListener = new MyLocationListener();
-    Handler handler= new Handler((msg)->{
-        switch (msg.what){
+    public LocationClient mLocationClient  = null;
+    public BDLocationListener myListener = new MyLocationListener();
+    private String account;
+    private String moreAddress = "地址未初始化";
+    Handler handler = new Handler((msg) -> {
+        switch (msg.what) {
             case MESSAGE_GET_SUCCESS:
                 contentBody = (String) msg.obj;
                 dealDate(contentBody);
@@ -72,7 +82,7 @@ public class HomeStudentActivity extends AppCompatActivity {
                 break;
             case MESSAGE_CREATE_FALL:
                 if (msg.obj == "输入为空")
-                    Toast.makeText(getApplicationContext(), "班级名称不能为空！" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "班级名称不能为空！", Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(HomeStudentActivity.this, "创建失败, 请检查网络连接!", Toast.LENGTH_SHORT).show();
                 break;
@@ -87,37 +97,33 @@ public class HomeStudentActivity extends AppCompatActivity {
         }
         return false;
     });
-    private String account;
-    private String moreAddress = "地址未初始化";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_student);
-        // 声明定位客户端， 注册监听函数
-        mLocationClient = new LocationClient(getApplicationContext());
-        mLocationClient.registerLocationListener(myListener);
-        // 客户端的定位参数配置
-        LocationClientOption option = new LocationClientOption();
-        option.setIsNeedAddress(true);
-        mLocationClient.setLocOption(option);
 
-        // 权限配置
-        getPermissionMethod();
-        mLocationClient.start();
-        new Thread(()->{
-            while (true) {
-                moreAddress = myListener.moreAddress;
-                if (moreAddress!=null)
-                    break;
-            }
-            Log.d("位置信息", "位置信息: "+moreAddress);
-        }).start();
+        mLocationClient = new LocationClient(getApplicationContext());
+        // 设置定位参数
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true); // 打开GPRS
+        option.setCoorType("bd09ll");// 返回的定位结果是百度经纬度,默认值gcj02
+        option.setScanSpan(1500); // 设置发起定位请求的间隔时间为5000ms
+        // 设置获取地址信息
+        option.setIsNeedAddress(true);
+        option.setIsNeedLocationDescribe(true);
+        mLocationClient.setLocOption(option);
+        // 注册监听函数
+        mLocationClient.registerLocationListener(myListener);
+       new Thread(()->{
+           // 调用此方法开始定位
+           mLocationClient.start();
+       }).start();
 
         // intent
         this.account = getIntent().getStringExtra("account");
-        String name=getIntent().getStringExtra(("name"));
+        String name = getIntent().getStringExtra(("name"));
         // toolBar的设置
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -128,7 +134,7 @@ public class HomeStudentActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab_stu_class);
         fab.setOnClickListener(v -> {
             // 浮动按钮可以写加入班级
-            joinclass(this.account,name);
+            joinclass(this.account, name);
         });
         // 滑动刷新
         SwipeRefreshLayout sp = findViewById(R.id.swipeFlash);
@@ -144,6 +150,36 @@ public class HomeStudentActivity extends AppCompatActivity {
         //获取班级数据
         getClassData(account);
     }
+
+    /**
+     * 定位成功之后的回调函数
+     *
+     * @author zhaokaiqiang
+     *
+     */
+    public class MyLocationListener implements BDLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            if (location == null)
+                return;
+
+            StringBuffer sb = new StringBuffer(256);
+            sb.append("\n县 ：");
+            sb.append(location.getAddrStr());
+            sb.append("\n描述 ：");
+            sb.append(location.getLocationDescribe());
+            if (location.getLocType() == BDLocation.TypeGpsLocation) {
+                sb.append("\n速度 : ");
+                sb.append(location.getSpeed());
+                sb.append("\n卫星数 : ");
+                sb.append(location.getSatelliteNumber());
+            }
+            moreAddress = location.getLocationDescribe();
+            Log.d("dizhi","duz"+moreAddress);
+        }
+    }
+
+
 
     private void joinclass(String account, String name) {
         final EditText editText = new EditText(HomeStudentActivity.this);
@@ -165,8 +201,8 @@ public class HomeStudentActivity extends AppCompatActivity {
                                     .add("classKey", classKey)
                                     .add("name", name)
                                     .add("account", account)
-                                    .add("state","0")
-                                    .add("location","花江校区") // 默认地址
+                                    .add("state", "0")
+                                    .add("location", "花江校区") // 默认地址
                                     .build();
                             Request request = new Request.Builder()
                                     .url(url)
@@ -191,7 +227,9 @@ public class HomeStudentActivity extends AppCompatActivity {
         Gson gson = new Gson();
         List<Classes> classList = gson.fromJson(message, new TypeToken<List<Classes>>() {
         }.getType());
-        classAdapter = new ClassAdapter(HomeStudentActivity.this, classList,0,account,moreAddress);
+        if (moreAddress == null)
+            moreAddress = "默认地址";
+        classAdapter = new ClassAdapter(HomeStudentActivity.this, classList, 0, account, moreAddress);
         listView.setAdapter(classAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -251,44 +289,8 @@ public class HomeStudentActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void getPermissionMethod() {
-        //授权列表
-        List<String> permissionList = new ArrayList<>();
 
-        //检查是否获取该权限 ACCESS_FINE_LOCATION
-        if(ContextCompat.checkSelfPermission(HomeStudentActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
 
-        if (!permissionList.isEmpty()){ //权限列表不是空
-            String[] permissions = permissionList.toArray(new String[permissionList.size()]);
-            //动态申请权限的请求
-            ActivityCompat.requestPermissions(HomeStudentActivity.this,permissions,1);
-        }
-    }
-
-    /**
-     * 监听用户是否授权
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case 1:
-                if(grantResults.length>0){
-                    for (int result:grantResults){
-                        if (result != PackageManager.PERMISSION_GRANTED){
-                            //拒绝获取权限
-//                            Toast.makeText(this, "必须统一所有权限才能使用本程序", Toast.LENGTH_SHORT).show();
-//                            finish();
-//                            return;
-                        }
-                    }
-                }
-                break;
-            default:
-                break;
-        }
-    }
     private void updateItem(int position) {
         /**第一个可见的位置**/
         int firstVisiblePosition = listView.getFirstVisiblePosition();
