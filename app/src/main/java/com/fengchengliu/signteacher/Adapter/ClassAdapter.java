@@ -52,7 +52,6 @@ public class ClassAdapter extends BaseAdapter {
     private final String account;
     private String location;
     private String rightCode = null;
-    public int[] classNum = {1, 2, 3, 4, 5, 6, 7, 8};
     private final HashMap<String, Integer> hashMap = new HashMap<>();
 
     public ClassAdapter(Context context, List<Classes> list, int type, String account) {

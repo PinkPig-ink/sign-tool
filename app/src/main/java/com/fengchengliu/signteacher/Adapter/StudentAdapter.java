@@ -10,12 +10,18 @@ import android.widget.BaseAdapter;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.fengchengliu.signteacher.Object.Classes;
 import com.fengchengliu.signteacher.Object.Student;
 import com.fengchengliu.signteacher.R;
 import com.fengchengliu.signteacher.ViewHolder.StudentItemVH;
 import com.fengchengliu.signteacher.Object.User;
 
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class StudentAdapter extends BaseAdapter {
     private LayoutInflater inflater;
@@ -76,7 +82,7 @@ public class StudentAdapter extends BaseAdapter {
         holder.signPosition.setText(listItem.get(position).getLocation());
         holder.menu.setOnClickListener(v-> {
             String account = String.valueOf(listItem.get(position).getAccount());
-            showPupMenu(mContext,holder.menu,account,classKey);
+            showPupMenu(mContext,holder.menu,classKey,account);
         });
         return convertView;
     }
@@ -87,15 +93,69 @@ public class StudentAdapter extends BaseAdapter {
             switch (item.getItemId()) {
                 case R.id.action_come:
                     // 修改为已签到
-                    Toast.makeText(mContext,"功能即将上线",Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(mContext,"功能即将上线",Toast.LENGTH_SHORT).show();
+                    setSign(classKey,account);
                     break;
                 case R.id.action_no_come:
                     // 修改为未签到
-                    Toast.makeText(mContext,"功能即将上线",Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(mContext,"功能即将上线",Toast.LENGTH_SHORT).show();
+                    setUnSign(classKey,account);
                     break;
             }
             return true;
         });
         popupMenu.show();
+    }
+
+    private void setUnSign(String classKey, String account) {
+        new Thread(()->{
+            OkHttpClient client = new OkHttpClient();
+            String url = "http://116.63.131.15:9001/setUnSign?classKey="+classKey+"&account="+account;
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            try (Response response = client.newCall(request).execute()) {
+                if (response.isSuccessful()) {
+                    Log.d("修改签到状态成功","code"+response.body().string());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        int position = 0;
+        Log.d("ceshi",account+ classKey+ "    sss");
+        for (Student student : listItem) {
+            if (student.getAccount() == Integer.parseInt(account))
+                break;
+            position++;
+        }
+        listItem.get(position).setState(0);
+        notifyDataSetChanged();
+    }
+
+    private void setSign(String classKey, String account) {
+        new Thread(()->{
+            OkHttpClient client = new OkHttpClient();
+            String url = "http://116.63.131.15:9001/setSign?classKey="+classKey+"&account="+account;
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            try (Response response = client.newCall(request).execute()) {
+                if (response.isSuccessful()) {
+                    Log.d("修改签到状态成功","code"+response.body().string());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        int position = 0;
+        Log.d("ceshi",account+ classKey+ "    sss");
+        for (Student student : listItem) {
+            if (student.getAccount() == Integer.parseInt(account))
+                break;
+            position++;
+        }
+        listItem.get(position).setState(1);
+        notifyDataSetChanged();
     }
 }
